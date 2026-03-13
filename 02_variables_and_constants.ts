@@ -1,4 +1,5 @@
-function printsVar(){
-console.log("Hello");
+function PORTADDRESS() {
+  const PORT: number=5000;console.log(PORT);
 }
-printsVar()
+// PORT is number annotated
+PORTADDRESS();

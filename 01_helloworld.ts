@@ -28,3 +28,11 @@ temperature=46;
 console.log(temperature);
 
 //{codefile-> parsing -> Syntax Tree}-> Just-In-Time Compiler ->{->Byte Code-> Machine Code}-> Code Execution.
+function printsVar(){
+console.log("Hello");
+console.table({city: "Kolkata"});
+console.error("Error is there");
+console.warn(Error);
+}
+//Error is a constructor
+printsVar();
