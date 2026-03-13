@@ -14,7 +14,7 @@ function emptyFunction() {
 console.log(typeof(emptyFunction));
 console.log(emptyFunction);
 const emptyFunction2 = ()=>{
-
+// codefile-> parse-> Syntax Tree -> walking -> Annotated Syntax Tree (with object ids) before the code runs
 }// In javascript everything is an Object
 console.log(typeof(helloWorld));
 console.log(typeof(emptyFunction2));
@@ -27,3 +27,4 @@ console.log(temperature);
 temperature=46;
 console.log(temperature);
 
+//{codefile-> parsing -> Syntax Tree}-> Just-In-Time Compiler ->{->Byte Code-> Machine Code}-> Code Execution.
