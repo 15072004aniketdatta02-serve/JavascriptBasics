@@ -20,8 +20,8 @@ function dataTypes(){
     Symbol
     */
 
-var rank:Number=55;
-let score:Number = 102;
+var rank:number=55;
+let score:number = 102;
 console.log(score);
 //score stores the reference to the memory address where 102 is stored
 let hex1:string='0xb10101100';
@@ -30,8 +30,8 @@ console.log(Object(hex1));
 console.log();
 console.log(rank);
 console.log(Object(hex2));
-console.log(hex1==hex2);//true //bad practice
-console.log(hex1===hex2);//false //bad practice
+// console.log(hex1==hex2);//true //bad practice
+// console.log(hex1===hex2);//false //bad practice
 // strings
 let name="letslearn.dev";
 let isLoggedIn = false;
@@ -61,7 +61,13 @@ sortedTeas.forEach((tea: string): void => {
 let User={firstName:"Aniket",lastName:"Datta"}
 //Date 
 console.log(Date.now());
-console.log();
-
+console.log(Boolean(0));//false
+console.log(Boolean(1));//true
+console.log(Boolean(null));//false
+console.log(Boolean(undefined));//false
+console.log(Boolean(User));//true
+//assignment
+const getScore:number=score;
+console.log(getScore);
 }
 dataTypes();
