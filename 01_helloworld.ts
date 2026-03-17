@@ -549,4 +549,146 @@ In the context of the factory metaphor described in the comments:
 
 This simple example establishes the foundation for more complex applications where additional classes could represent different components of the system, just as a factory consists of various specialized departments working together to create a final product. */
 
+// Every logic can be simulated in the turing machine
 
+
+// ------------------------------Modules--------------------------------------- 
+const KiranaStore = (function(){
+let itemCount:number=0;
+const godown:string[]=[];
+return {
+    add(name:string)
+    {
+        itemCount++;
+        godown.push(name);
+        return `Sharma Ji stocked item: ${name}`;
+    },
+    count(){
+        return itemCount;
+    },
+    list(){
+        return godown.slice();
+    }
+}
+})();
+console.log(KiranaStore.add('Tea 10 packs'));
+console.log(KiranaStore.add('ginger 10 kgs'));
+console.log("Count:",KiranaStore.count());
+console.log("List: ",KiranaStore.list());
+// console.log("Direct Godown ?:", typeof KiranaStore.godown); 
+// console.log("Direct Godown ?:", typeof KiranaStore.itemCount); // undefined
+
+const AccountBook = (function (){
+  const records:string[]=[];
+  let accessLog:string[]=[];
+  function logAccess(action:string){
+    accessLog.push(`[${new Date().toISOString().slice(0,10)}] - ${action}`);
+  }
+  function store(doc:string){
+    logAccess(`Stored: ${doc}`);
+    records.push(doc);
+  }
+  function retrieve(index:number){
+    logAccess(`Retrieved index ${index}`);
+    return records[index] || "Not found";
+  }
+  function getRecordCount(){
+    return records.length;
+  }
+  function getAccessLog(){
+    return accessLog.slice();
+  }
+
+  return  {
+    store,
+    retrieve,
+    count: getRecordCount,
+    log: getAccessLog
+  }
+})();
+
+AccountBook.store("Sugar 2Kg");
+AccountBook.store("Rice 5kg");
+console.log("Sharma Ji retrieve:",AccountBook.retrieve(0));
+console.log("Sharma Ji retrieve:",AccountBook.retrieve(1));
+console.log("Count:",AccountBook.count);
+console.log("Log Length: ", AccountBook.log().length);
+// console.log("Show me type of logAccess ", typeof AccountBook.logAccess); //undefined
+
+// Simulation 
+
+const OldSharmaGroceries = {};
+
+OldSharmaGroceries.Inventory=(function (){
+        function unit_Price(totalPrice:number, quantity:number):number{
+                return totalPrice/quantity;
+        }
+        function total_Weight(weightPerItem:number, quantity:number) {
+            return weightPerItem*quantity;
+        }
+        //export {unitPrice, totalWeight}
+        return {unit_Price, total_Weight}
+})()
+OldSharmaGroceries.BillingCalculator =(function(Inv){
+    function bulkDiscount(pricePerKg:number,Kgs:number) {
+             const total_Weight=Inv.total_Weight(pricePerKg, Kgs);
+             return `${(total_Weight*0.95).toFixed(1)} after 5% discount`
+    }
+    return {bulkDiscount}
+})(OldSharmaGroceries.Inventory); 
+console.log(OldSharmaGroceries.BillingCalculator.bulkDiscount(60,10));
+console.log("Store_module",Object.keys(OldSharmaGroceries));
+console.log('Inventory APIs',Object.keys(OldSharmaGroceries.Inventory));
+// interface Inventory {
+//   unitPrice: (totalPrice: number, quantity: number) => number;
+//   totalWeight: (weightPerItem: number, quantity: number) => number;
+// }
+
+// namespace SharmaGroceries {
+//   export const Inventory = (function (): Inventory {
+//     function unitPrice(totalPrice: number, quantity: number): number {
+//       return totalPrice / quantity;
+//     }
+
+//     function totalWeight(weightPerItem: number, quantity: number): number {
+//       return weightPerItem * quantity;
+//     }
+
+//     return { unitPrice, totalWeight };
+//   })();
+// }
+//Async Operation -> Current JS approaches->Async/Await , Promises -> Traditional Try-Catch forces block-level scoping, Creates Deep-indentation hell, Promise Chaining -> Requires .catch at every step, breaks inline expression flow-> The resulting burden Error handling is 3-5x larger than logic.. Business value buried in boilerplate-> The missing piece : No standard way to handle errrors online without breaking execution flow.
+
+// Typed custom errors — never throw raw strings in prod
+// class ApiError extends Error {
+//   constructor(
+//     public readonly statusCode: number,
+//     public readonly code: string,
+//     message: string
+//   ) { super(message); this.name = "ApiError"; }
+// }
+
+// async function withRetry<T>(
+//   fn: () => Promise<T>,
+//   retries = 3,
+//   delay = 300
+// ): Promise<T> {
+//   for (let attempt = 1; attempt <= retries; attempt++) {
+//     try {
+//       return await fn();
+//     } catch (err) {
+//       if (err instanceof ApiError && err.statusCode < 500) throw err; // don't retry 4xx
+//       if (attempt === retries) throw err;
+//       await sleep(delay * 2 ** attempt); // exponential: 600ms, 1200ms …
+//     }
+//   }
+//   throw new Error("unreachable");
+// }
+
+// async function fetchUser(id: string) {
+//   return withRetry(async () => {
+//     const res = await fetch(`/api/users/${id}`);
+//     if (!res.ok) throw new ApiError(res.status, "FETCH_USER_FAILED", await res.text());
+//     return res.json() as Promise<User>;
+//   });
+// }
